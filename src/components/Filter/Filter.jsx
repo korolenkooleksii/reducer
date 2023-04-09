@@ -1,16 +1,13 @@
-import { nanoid } from 'nanoid';
 import { Wrapper, LabelForm, InputForm } from './Filter.styled';
 import PropTypes from 'prop-types';
 
-const Filter = ({ filter, updateFilter }) => {
-  const idForm = nanoid();
+const Filter = ({ filter = '', updateFilter }) => {
 
   return (
     <Wrapper>
-      <LabelForm htmlFor={idForm}>
+      <LabelForm>
         Find contact by name
         <InputForm
-          id={idForm}
           type="text"
           name="name"
           pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
@@ -26,7 +23,7 @@ const Filter = ({ filter, updateFilter }) => {
 };
 
 Filter.propTypes = {
-  state: PropTypes.string,
+  filter: PropTypes.string,
   updateFilter: PropTypes.func,
 };
 

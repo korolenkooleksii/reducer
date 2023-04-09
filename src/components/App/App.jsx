@@ -1,32 +1,41 @@
 import { useReducer } from 'react';
 // import useLocalStorage from 'hooks/useLocalStorage';
-import { Container, TitleForm, TitleContacts, Info } from './App.styled';
-import ContactForm from '../ContactForm/ContactForm';
-import ContactsList from '../ContactsList/ContactsList';
-import Filter from '../Filter/Filter';
-import { ToastContainer } from 'react-toastify';
+
+import { ToastContainer, toast } from 'react-toastify';
+
+import reducer from 'utils/reducer';
+import ContactForm from 'components/ContactForm/ContactForm';
+import ContactsList from 'components/ContactsList/ContactsList';
+import Filter from 'components/Filter/Filter';
+
 import 'react-toastify/dist/ReactToastify.css';
-import reducer from 'reducer';
+import { Container, TitleForm, TitleContacts, Info } from './App.styled';
 
 // const KEY_CONTACTS = 'contacts';
+const INITIAL_STAT = {
+  contacts: [],
+  filter: '',
+};
 
 const App = () => {
   // const [contacts, setContacts] = useLocalStorage(KEY_CONTACTS, []);
-  // const [filter, setFilter] = useState('');
 
-  const [state, dispatch] = useReducer(reducer, {});
+  const [state, dispatch] = useReducer(reducer, INITIAL_STAT);
 
-  const addContact = (userName, userNumber) => {
+  const addContact = contact => {
+    const duplicate = state.contacts.some(
+      el => el.name.toLowerCase() === contact.name.toLowerCase().trim()
+    );
+    if (duplicate) {
+      toast.warn(`${contact.name} is already in contacts.`, {
+        theme: 'colored',
+      });
+      return;
+    }
+
     dispatch({
       type: 'add',
-      payload: [userName, userNumber],
-    });
-  };
-
-  const updateFilter = data => {
-    dispatch({
-      type: 'filter',
-      payload: data,
+      payload: contact,
     });
   };
 
@@ -37,22 +46,34 @@ const App = () => {
     });
   };
 
+  const updateFilter = data => {
+    dispatch({
+      type: 'filter',
+      payload: data,
+    });
+  };
+
+  const getVisibleContacts = () => {
+    const { contacts, filter } = state;
+    return contacts.filter(el => el.name.includes(filter.toLowerCase()));
+  };
+
   return (
     <Container>
       <TitleForm>Phonebook</TitleForm>
       <ContactForm addContact={addContact} />
-      {!state.contacts || state.contacts.length === 0 ? (
-        <Info>No contacts.</Info>
-      ) : (
+      
+      {!state.contacts.length && <Info>No contacts.</Info>}
+
+      {state.contacts.length > 0 && (
         <>
           <TitleContacts>Contacts</TitleContacts>
           <Filter filter={state.filter} updateFilter={updateFilter} />
         </>
       )}
+
       <ContactsList
-        contacts={
-          (state.visibleFriends && state.visibleFriends.length > 0) ? state.visibleFriends : (state.contacts || [])
-        }
+        contacts={state.contacts ? getVisibleContacts() : state.contact}
         deleteContact={deleteContact}
       />
       <ToastContainer />

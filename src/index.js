@@ -8,10 +8,10 @@ import App from 'components/App/App';
 const theme = {
   colors: {
     dark: '#041d51',
-    greey: '#313131',
+    grey: '#313131',
     white: 'white',
     accent: '#739ceda4',
-    noActiv: '#b3c4e6a3',
+    noActive: '#b3c4e6a3',
     shadow: '1px 2px 2px rgb(0 0 0 / 0.5)',
     shadowAccent: '2px 5px 2px rgb(0 0 0 / 0.5)',
   },

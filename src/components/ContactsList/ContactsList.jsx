@@ -6,7 +6,7 @@ import {
 import { TbPoint } from 'react-icons/tb';
 import PropTypes from 'prop-types';
 
-const ContactsList = ({ contacts, deleteContact }) => {
+const ContactsList = ({ contacts = [], deleteContact }) => {
   return (
     <ListContacts>
       {contacts.map(({ name, number, id }) => (

@@ -11,7 +11,7 @@ export const FormInput = styled.form`
   border: 2px solid ${p => p.theme.colors.dark};
   border-radius: 4px;
   box-shadow: ${p => p.theme.colors.shadow};
-  color: ${p => p.theme.colors.greey};
+  color: ${p => p.theme.colors.grey};
 `;
 
 export const LabelForm = styled.label`
@@ -57,7 +57,7 @@ export const ButtonForm = styled.button`
     border 250ms ease-in-out;
 
   :disabled {
-    background-color: ${p => p.theme.colors.noActiv};
+    background-color: ${p => p.theme.colors.noActive};
     box-shadow: none;
     color: ${p => p.theme.colors.white};
   }
