@@ -16,6 +16,12 @@ export default function reducer(state, action) {
         ...state,
         filter: action.payload,
       }
+    
+    case 'localStorage':
+      return {
+        ...state,
+        contacts: action.payload
+      }
 
     default:
       return state;

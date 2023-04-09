@@ -1,5 +1,5 @@
-import { useReducer } from 'react';
-// import useLocalStorage from 'hooks/useLocalStorage';
+import { useReducer, useEffect } from 'react';
+import useLocalStorage from 'hooks/useLocalStorage';
 
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -11,16 +11,24 @@ import Filter from 'components/Filter/Filter';
 import 'react-toastify/dist/ReactToastify.css';
 import { Container, TitleForm, TitleContacts, Info } from './App.styled';
 
-// const KEY_CONTACTS = 'contacts';
+const KEY_CONTACTS = 'contacts';
 const INITIAL_STAT = {
   contacts: [],
   filter: '',
 };
 
 const App = () => {
-  // const [contacts, setContacts] = useLocalStorage(KEY_CONTACTS, []);
-
   const [state, dispatch] = useReducer(reducer, INITIAL_STAT);
+
+  const [contacts, setContacts] = useLocalStorage(KEY_CONTACTS, []);
+
+  useEffect(() => {
+    getLocalStorage();
+  }, []);
+
+  useEffect(() => {
+    setContacts(state.contacts);
+  }, [setContacts, state]);
 
   const addContact = contact => {
     const duplicate = state.contacts.some(
@@ -55,14 +63,23 @@ const App = () => {
 
   const getVisibleContacts = () => {
     const { contacts, filter } = state;
-    return contacts.filter(el => el.name.includes(filter.toLowerCase()));
+    return contacts.filter(el =>
+      el.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
+  const getLocalStorage = () => {
+    dispatch({
+      type: 'localStorage',
+      payload: contacts,
+    });
   };
 
   return (
     <Container>
       <TitleForm>Phonebook</TitleForm>
       <ContactForm addContact={addContact} />
-      
+
       {!state.contacts.length && <Info>No contacts.</Info>}
 
       {state.contacts.length > 0 && (
@@ -73,7 +90,7 @@ const App = () => {
       )}
 
       <ContactsList
-        contacts={state.contacts ? getVisibleContacts() : state.contact}
+        contacts={state.contacts ? getVisibleContacts() : state.contacts}
         deleteContact={deleteContact}
       />
       <ToastContainer />
